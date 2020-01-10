@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/plugins/idescali_ws" >
+        <file>icon.png</file>
+    </qresource>
+	
+	<qresource prefix="/plugins/idescali_ws/img" >
+        <file>img/alcaldia.png</file>
+    </qresource>
+	
+	<qresource prefix="/plugins/idescali_ws/img" >
+        <file>img/corazon.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,18 @@
+[general]
+name=Servicios WMS - IDES Cali
+qgisMinimumVersion=3.0
+description=Este plugin provee acceso a los servicios WMS de la Infraestructura de Datos Espaciales de Santiago de Cali (IDESC)
+version=0.1
+author=Andres Herrera
+email=fandresherrera@hotmail.com
+about=Este plugin provee acceso a los servicios WMS de la Infraestructura de Datos Espaciales de Santiago de Cali (IDESC)
+tracker=https://github.com/AndresHerrera/idescali_ws/issues
+repository=https://github.com/AndresHerrera/idescali_ws
+hasProcessingProvider=no
+tags=python
+homepage=https://github.com/AndresHerrera/idescali_ws
+category=Web
+icon=icon.png
+experimental=True
+deprecated=False
+server=False
