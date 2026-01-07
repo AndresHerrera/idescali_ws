@@ -43,7 +43,12 @@ class IDESCaliWebServices:
     def __init__(self, iFace):
         self.iFace = iFace
         self.plugin_dir = os.path.dirname(__file__)
-        locale = QSettings().value('locale/userLocale')[0:2]
+        locale_value = QSettings().value('locale/userLocale')
+        if locale_value:
+            locale = locale_value[0:2] if len(locale_value) >= 2 else 'es'
+        else:
+            locale = 'es'  # Default a español si no se detecta
+        
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
@@ -53,9 +58,12 @@ class IDESCaliWebServices:
             self.translator = QTranslator()
             self.translator.load(locale_path)
             QCoreApplication.installTranslator(self.translator)
+        
+        self.locale = locale  # Guardar el locale para uso posterior
 
         self.dlg = IDESCaliWebServicesDialog()
         self.dlginfo = InfoDialog()
+        self._translate_ui()
         self.generatedService = None
         self.bar = QProgressBar()
         self.bar.setRange(0, 0)
@@ -67,7 +75,72 @@ class IDESCaliWebServices:
         self.selected_layers = set()  # Almacenar las capas seleccionadas (por nombre)
 
     def tr(self, message):
-        return QCoreApplication.translate('IDESCaliWebServices', message)
+        """Traduce un mensaje usando el sistema de traducción de Qt o traducciones manuales"""
+        # Intentar usar el sistema de traducción de Qt
+        translated = QCoreApplication.translate('IDESCaliWebServices', message)
+        
+        # Si no hay traducción (devuelve el mismo texto) y el locale es inglés, usar traducciones manuales
+        locale = getattr(self, 'locale', None)
+        if translated == message and locale == 'en':
+            # Diccionario de traducciones manuales
+            translations = {
+                "Servicios WMS - Geoportal IDESC - v0.2": "WMS Services - IDESC Geoportal - v0.2",
+                "Filtrar por espacio de trabajo:": "Filter by workspace:",
+                "Buscar capa por nombre:": "Search layer by name:",
+                "Capa(s) seleccionadas:": "Selected layer(s):",
+                "Limpiar selección": "Clear selection",
+                "Cancelar": "Cancel",
+                "&Agregar al Mapa": "&Add to Map",
+                "Capas disponibles: 0": "Available layers: 0",
+                "Capas disponibles: ": "Available layers: ",
+                "Acerca de": "About",
+                "Este plugin provee acceso a los servicios WMS de la Infraestructura de Datos Espaciales de Santiago de Cali (IDESC)": 
+                    "This plugin provides access to WMS services from the Spatial Data Infrastructure of Santiago de Cali (IDESC)",
+                "Desarrollado por Andres Herrera - fandresherrera@hotmail.com": 
+                    "Developed by Andres Herrera - fandresherrera@hotmail.com",
+                "Aceptar": "OK",
+                "ID": "ID",
+                "Capa": "Layer",
+                "Nombre": "Name",
+                "Resumen": "Abstract",
+                "Todos": "All",
+                "ERROR:": "ERROR:",
+                "No se puede cargar este servicio en este momento.": "Cannot load this service at this time.",
+                "No se puede acceder a este servicio en este momento.": "Cannot access this service at this time.",
+                "Imposible cargar las capas ": "Unable to load layers ",
+                "en este momento.": "at this time.",
+                "Mensaje:": "Message:",
+                "Fueron cargadas las capas WMS con exito": "WMS layers were loaded successfully",
+                "No selecciono ninguna capa WMS para cargar": "No WMS layer selected to load",
+                "&Servicios WMS - Geoportal IDESC": "&WMS Services - IDESC Geoportal"
+            }
+            return translations.get(message, message)
+        
+        return translated
+
+    def _translate_ui(self):
+        """Traduce los textos de la interfaz de usuario"""
+        # Traducir diálogo principal
+        self.dlg.setWindowTitle(self.tr("Servicios WMS - Geoportal IDESC - v0.2"))
+        self.dlg.workspace_label.setText(self.tr("Filtrar por espacio de trabajo:"))
+        self.dlg.search_label.setText(self.tr("Buscar capa por nombre:"))
+        self.dlg.layer_label.setText(self.tr("Capa(s) seleccionadas:"))
+        self.dlg.clear_button.setText(self.tr("Limpiar selección"))
+        self.dlg.close_button.setText(self.tr("Cancelar"))
+        self.dlg.add_button.setText(self.tr("&Agregar al Mapa"))
+        self.dlg.label_conteo.setText(self.tr("Capas disponibles: 0"))
+        
+        # Traducir diálogo de información
+        self.dlginfo.setWindowTitle(self.tr("Acerca de"))
+        about_text = self.tr("Este plugin provee acceso a los servicios WMS de la Infraestructura de Datos Espaciales de Santiago de Cali (IDESC)")
+        developer_text = self.tr("Desarrollado por Andres Herrera - fandresherrera@hotmail.com")
+        self.dlginfo.label_2.setText(
+            '<html><head/><body><p>' + about_text + '</p>' +
+            '<p><a href="https://www.cali.gov.co/planeacion/publicaciones/46691/servicios_wms_idesc/">' +
+            '<span style=" text-decoration: underline; color:#0000ff;">IDES Cali</span></a></p>' +
+            '<p>' + developer_text + '</p></body></html>'
+        )
+        self.dlginfo.ok_dialog.setText(self.tr("Aceptar"))
 
     def add_action(
             self,
@@ -156,13 +229,13 @@ class IDESCaliWebServices:
                 wms = WebMapService(url)
                 self.generatedService.setWebMapService(wms)
             except Exception as e:
-                QMessageBox.information(None, "ERROR:", 'No se puede cargar este servicio en este momento.' + str(e))
+                QMessageBox.information(None, self.tr("ERROR:"), self.tr('No se puede cargar este servicio en este momento.') + ' ' + str(e))
         elif self.generatedService.service_type == ServiceType.WebMapTileService.value:
             try:
                 wmts = WebMapTileService(url)
                 self.generatedService.setWebMapService(wmts)
             except Exception as e:
-                QMessageBox.information(None, "ERROR:", 'No se puede acceder a este servicio en este momento.' + str(e))
+                QMessageBox.information(None, self.tr("ERROR:"), self.tr('No se puede acceder a este servicio en este momento.') + ' ' + str(e))
         self.bar.close()
 
     def openDlgInfo(self):
@@ -207,7 +280,7 @@ class IDESCaliWebServices:
         workspaces = self.get_unique_workspaces(contentOrderedDict)
         self.dlg.workspace_combo.blockSignals(True)  # Bloquear señales para evitar filtrado durante la carga
         self.dlg.workspace_combo.clear()
-        self.dlg.workspace_combo.addItem("Todos")  # Opción para mostrar todos
+        self.dlg.workspace_combo.addItem(self.tr("Todos"))  # Opción para mostrar todos
         for workspace in workspaces:
             self.dlg.workspace_combo.addItem(workspace)
         self.dlg.workspace_combo.blockSignals(False)
@@ -246,8 +319,8 @@ class IDESCaliWebServices:
             # Columna 4: Resumen
             self.dlg.table_widget.setItem(index, 4, QTableWidgetItem(str(abstract)))
 
-        self.dlg.table_widget.setHorizontalHeaderLabels(["", "ID", "Capa", "Nombre", "Resumen"])
-        self.dlg.label_conteo.setText("Capas disponibles: "+str(len(contentOrderedDict)))
+        self.dlg.table_widget.setHorizontalHeaderLabels(["", self.tr("ID"), self.tr("Capa"), self.tr("Nombre"), self.tr("Resumen")])
+        self.dlg.label_conteo.setText(self.tr("Capas disponibles: ") + str(len(contentOrderedDict)))
         self.setTableWidgetBehaviour()
         
         # Actualizar la lista de capas seleccionadas después de restaurar
@@ -294,7 +367,8 @@ class IDESCaliWebServices:
             workspace = self.extract_workspace(name)
             
             # Filtrar por espacio de trabajo
-            workspace_match = (selected_workspace == "Todos" or workspace == selected_workspace)
+            todos_text = self.tr("Todos")
+            workspace_match = (selected_workspace == todos_text or workspace == selected_workspace)
             
             # Filtrar por búsqueda de nombre
             name_match = (not search_criteria or search_criteria in name.lower())
@@ -338,8 +412,8 @@ class IDESCaliWebServices:
             
             count += 1
 
-        self.dlg.table_widget.setHorizontalHeaderLabels(["", "ID", "Capa", "Nombre", "Resumen"])
-        self.dlg.label_conteo.setText("Capas disponibles: "+str(len(wms_filtered_contents)))
+        self.dlg.table_widget.setHorizontalHeaderLabels(["", self.tr("ID"), self.tr("Capa"), self.tr("Nombre"), self.tr("Resumen")])
+        self.dlg.label_conteo.setText(self.tr("Capas disponibles: ") + str(len(wms_filtered_contents)))
         self.setTableWidgetBehaviour()
         
         # Actualizar la lista de capas seleccionadas después de restaurar
@@ -473,14 +547,14 @@ class IDESCaliWebServices:
                        '&url=' + str(self.generatedService.service_url)
                 rlayer = QgsRasterLayer(url, selectedServices[selectedService].title, 'wms')
                 if not rlayer.isValid():
-                    QMessageBox.information(None, "ERROR:", 'Imposible cargar las capas ' +
+                    QMessageBox.information(None, self.tr("ERROR:"), self.tr('Imposible cargar las capas ') +
                                             selectedServices[selectedService].title +
-                                            ' en este momento.')
+                                            ' ' + self.tr('en este momento.'))
                 else:
                     QgsProject.instance().addMapLayer(rlayer)
-                    self.iFace.messageBar().pushMessage("Mensaje:", "Fueron cargadas las capas WMS con exito", level=Qgis.Success, duration=3)
+                    self.iFace.messageBar().pushMessage(self.tr("Mensaje:"), self.tr("Fueron cargadas las capas WMS con exito"), level=Qgis.Success, duration=3)
             else:
-                QMessageBox.information(None, "ERROR:", 'No selecciono ninguna capa WMS para cargar')
+                QMessageBox.information(None, self.tr("ERROR:"), self.tr('No selecciono ninguna capa WMS para cargar'))
         self.bar.close()
 
 
