@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>569</width>
-    <height>117</height>
+    <height>140</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,12 +15,12 @@
   </property>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>461</width>
-     <height>71</height>
-    </rect>
+   <rect>
+    <x>10</x>
+    <y>10</y>
+    <width>461</width>
+    <height>94</height>
+   </rect>
    </property>
    <property name="font">
     <font>
@@ -28,7 +28,7 @@
     </font>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Este plugin provee acceso a los servicios WMS de la Infraestructura de Datos Espaciales de Santiago de Cali (IDESC)&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.cali.gov.co/planeacion/publicaciones/46691/servicios_wms_idesc/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;IDES Cali&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Este plugin provee acceso a los servicios WMS de la Infraestructura de Datos Espaciales de Santiago de Cali (IDESC)&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.cali.gov.co/planeacion/publicaciones/46691/servicios_wms_idesc/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;IDES Cali&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Desarrollado por Andres Herrera - fandresherrera@hotmail.com&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="scaledContents">
     <bool>false</bool>
@@ -58,12 +58,12 @@
   </widget>
   <widget class="QPushButton" name="ok_dialog">
    <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>80</y>
-     <width>91</width>
-     <height>31</height>
-    </rect>
+   <rect>
+    <x>240</x>
+    <y>103</y>
+    <width>91</width>
+    <height>31</height>
+   </rect>
    </property>
    <property name="font">
     <font>

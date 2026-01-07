@@ -5,24 +5,24 @@
   <property name="windowModality">
    <enum>Qt::WindowModal</enum>
   </property>
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>642</width>
-    <height>459</height>
-   </rect>
-  </property>
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>642</width>
+     <height>510</height>
+    </rect>
+   </property>
   <property name="windowTitle">
-   <string>Servicios WMS - Geoportal IDESC</string>
+   <string>Servicios WMS - Geoportal IDESC - v0.2 </string>
   </property>
   <widget class="QTableWidget" name="table_widget">
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>37</y>
+     <y>65</y>
      <width>621</width>
-     <height>331</height>
+     <height>303</height>
     </rect>
    </property>
   </widget>
@@ -77,11 +77,45 @@
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="layoutWidget_workspace">
    <property name="geometry">
     <rect>
      <x>9</x>
      <y>9</y>
+     <width>621</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_workspace">
+    <item>
+     <widget class="QLabel" name="workspace_label">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Filtrar por espacio de trabajo:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="workspace_combo">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>37</y>
      <width>621</width>
      <height>25</height>
     </rect>
@@ -96,7 +130,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Buscar por nombre :</string>
+       <string>Buscar capa por nombre:</string>
       </property>
      </widget>
     </item>
@@ -146,6 +180,24 @@
     </item>
    </layout>
   </widget>
+  <widget class="QPushButton" name="clear_button">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>420</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Limpiar selección</string>
+   </property>
+  </widget>
   <widget class="QSplitter" name="splitter">
    <property name="geometry">
     <rect>
@@ -158,17 +210,23 @@
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
-   <widget class="QPushButton" name="add_button">
-    <property name="text">
-     <string>&amp;Agregar</string>
-    </property>
-    <property name="shortcut">
-     <string>Ctrl+A</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="close_button">
     <property name="text">
      <string>Cancelar</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="add_button">
+    <property name="text">
+     <string>&amp;Agregar al Mapa</string>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="shortcut">
+     <string>Ctrl+A</string>
     </property>
    </widget>
   </widget>

@@ -2,7 +2,7 @@
 name=Servicios WMS - IDES Cali
 qgisMinimumVersion=3.0
 description=Este plugin provee acceso a los servicios WMS de la Infraestructura de Datos Espaciales de Santiago de Cali (IDESC)
-version=0.1
+version=0.2
 author=Andres Herrera
 email=fandresherrera@hotmail.com
 about=Este plugin provee acceso a los servicios WMS de la Infraestructura de Datos Espaciales de Santiago de Cali (IDESC)
