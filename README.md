@@ -1,4 +1,4 @@
-# IDESCali WMS - QGIS Plugin
+# IDESCali WMS - QGIS Plugin v0.2
 
 Este plugin provee acceso a los servicios WMS de la Infraestructura de Datos Espaciales de Santiago de Cali (IDESC)
 
